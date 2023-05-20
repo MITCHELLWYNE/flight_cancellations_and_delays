@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
-
+from flask_cors import CORS
 
 #################################################
 # Database Setup
@@ -27,7 +27,7 @@ session = Session(engine)
 # Flask Setup
 #################################################
 app = Flask(__name__)
-
+CORS(app)
 
 
 #################################################
