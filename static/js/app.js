@@ -11,21 +11,46 @@ console.log("Data Promise: ", dataPromise);
 // =================================================================================
 
 // Read in JSON 
-d3.json(url).then(function(dataPromise) {
-    console.log(dataPromise);
-    console.log(dataPromise[1].airport);
+d3.json(url).then(function(data) {
+    console.log(data);
+    console.log(data[1].airport);
 
     for (let i = 0; i < dataPromise.length; i++) {
         let months = dataPromise[i].month;
         console.log(months);
-        //let lateArrival = dataPromise[i].arr_delayed;
-        //console.log(lateArrival);
-        //let filterLateArrival = lateArrival.filter(sample => dataPromise[i].airport === airport);
-        //let carrierCancellation = dataPromise[i].carrier_ct; // are these carrier cancellations?
-        //let filterarrierCancellation = carrierCancellation.filter(sample => dataPromise[i].airport === airport);
+        let lateArrival = dataPromise[i].arr_delayed;
+        console.log(lateArrival);
+        let filterLateArrival = lateArrival.filter(result => result[i].airport == airport);
+        console.log(filterLateArrival);
+        // let carrierCancellation = dataPromise[i].carrier_ct; // are these carrier cancellations?
+        // let filterarrierCancellation = carrierCancellation.filter(sample => dataPromise[i].airport === airport);
     };
 
 });
+
+// Init function for dropdown menu 
+function init() {
+    d3.json(url).then(function(dataPromise) {
+
+        // Select dropdown menu and grab information
+        let dropdownMenu = d3.select("#selDataset");
+        for (let i = 0; i < dataPromise.length; i++) {
+            let airport_name = dataPromise[i].airport_name;
+        };
+
+        // Append IDs to dropdown menu
+        airport_name.forEach((airport) => {
+            dropdownMenu.append("option").text(airport)
+        });
+    
+        // Determine inital graph data 
+        let firstData = airport_name[0];
+
+        // Display inital graphs 
+        Plots(firstData);
+        //Demographics(firstData);
+    });
+};
 
 // Plots
 function Plots(airport) {
@@ -83,29 +108,6 @@ function Plots(airport) {
 
 }
 
-// Init function for dropdown menu 
-function init() {
-    d3.json(url).then(function(dataPromise) {
-
-        // Select dropdown menu and grab information
-        let dropdownMenu = d3.select("#selDataset");
-        for (let i = 0; i < dataPromise.length; i++) {
-            let airport_name = dataPromise.airport_name[i];
-        };
-
-        // Append IDs to dropdown menu
-        airport_name.forEach((airport) => {
-            dropdownMenu.append("option").text(airport)
-        });
-    
-        // Determine inital graph data 
-        let firstData = airport_name[0];
-
-        // Display inital graphs 
-        Plots(firstData);
-        //Demographics(firstData);
-    });
-};
 
 // Demographics 
 //function Demographics(id) {
