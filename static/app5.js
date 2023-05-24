@@ -1,40 +1,20 @@
-// Create URL variable
-// const url = "http://127.0.0.1:5000/api/airline_delay_cause.json";
-// const url = "{{url_for('airline_delay_cause')}}"
-//const dataPromise = d3.json(url);
-//console.log("Data Promise: ", dataPromise);
-
-
-
 // =================================================================================
 
 // THIS ONLY RUNS IF I PYTHON3 APP.PY RUN APP.PY IN THE TERMINAL AND HAVE THE JSON PAGE OPEN
 
 // =================================================================================
 
-// Read in JSON 
-//d3.json(url).then(function(data) {
-    //console.log(data);
-    //console.log(data[1].airport);
-
-    //for (let i = 0; i < data.length; i++) {
-        //let months = data[i].month;
-        //console.log(months);
-        //let lateArrival = data[i].arr_delayed;
-        //console.log(lateArrival);
-        //let filterLateArrival = lateArrival.filter(result => result[i].airport == airport);
-        //console.log(filterLateArrival);
-        // let carrierCancellation = dataPromise[i].carrier_ct; // are these carrier cancellations?
-        // let filterarrierCancellation = carrierCancellation.filter(sample => dataPromise[i].airport === airport);
-    //};
-
-//});
-
 
 // Ariel's Code
 d3.json(url).then(function(data) {
     const myData = data;
     console.log(myData);
+
+    // Define variables to store the line graph data
+    let xDataDelA = [];
+    let yDataDelA = [];
+    let xDataCanA = [];
+    let yDataCanA = [];
   
     function init() {
       const airports = [...new Set(myData.map(d => d.airport))].sort();
@@ -48,6 +28,7 @@ d3.json(url).then(function(data) {
       dropdown.value = defaultAirport;
   
       createTable(defaultData);
+      LineGraph(defaultData);
   
     }
   
@@ -66,6 +47,7 @@ d3.json(url).then(function(data) {
         const selectedAirport = dropdown.value;
         const filteredData = myData.filter(d => d.airport === selectedAirport);
         createTable(filteredData);
+        LineGraph(filteredData);
       });
     }
   
@@ -142,38 +124,40 @@ d3.json(url).then(function(data) {
       tableContainer.appendChild(table);
     }
 
+    /////////////////////////////////////////////
 
-
-
+    
     // Test 
-    // Extracting the month and arr_delayed values
-    const DelPoints = myData.map(data => ({
-      month: data.month,
-      arr_flights: data.arr_flights
-    }));
-    
-    // Sorting the DelPoints array based on the month
-    DelPoints.sort((a, b) => a.month - b.month);
-    
-    // Creating arrays for x-axis (months) and y-axis (arr_flights)
-    const xDataDel = DelPoints.map(data => data.month);
-    const yDataDel = DelPoints.map(data => data.arr_flights);
+    function LineGraph(data) {
 
-    // Extracting the month and arr_cancelled values
-    const CalPoints = myData.map(data => ({
-      month: data.month,
-      arr_flights: data.arr_cancelled
-    }));
+        // Extracting the month and arr_delayed values
+        const DelPoints = data.map(data => ({
+            month: data.month,
+            arr_flights: data.arr_flights
+        }));
     
-    // Sorting the CalPoints array based on the month
-    CalPoints.sort((a, b) => a.month - b.month);
+        // Sorting the DelPoints array based on the month
+        DelPoints.sort((a, b) => a.month - b.month);
+    
+        // Creating arrays for x-axis (months) and y-axis (arr_flights)
+        const xDataDel = DelPoints.map(data => data.month);
+        const yDataDel = DelPoints.map(data => data.arr_flights);
 
-    // Creating arrays for x-axis (months) and y-axis (arr_cancelled)
-    const xDataCan = CalPoints.map(data => data.month);
-    const yDataCan = CalPoints.map(data => data.arr_cancelled);
+        // Extracting the month and arr_cancelled values
+        const CalPoints = data.map(data => ({
+            month: data.month,
+            arr_flights: data.arr_cancelled
+        }));
     
-    // Creating a line graph 
-    // Line Chart
+        // Sorting the CalPoints array based on the month
+        CalPoints.sort((a, b) => a.month - b.month);
+
+        // Creating arrays for x-axis (months) and y-axis (arr_cancelled)
+        const xDataCan = CalPoints.map(data => data.month);
+        const yDataCan = CalPoints.map(data => data.arr_cancelled);
+    
+        // Creating a line graph 
+        // Line Chart
           let delays = {
             x: xDataDel,
             y: yDataDel,
@@ -190,81 +174,7 @@ d3.json(url).then(function(data) {
           
           Plotly.newPlot("bar", lineData);
         
-      
-
-    //Create data references  
-    //const airports = [...new Set(myData.map(d => d.airport))].sort();
-    //const defaultAirport = airports[0];
-    //let filter = myData.filter(d => d.airport === defaultAirport);
-    //let months = myData.map(d => d.month).filter(filter);
-    //let months = myData.map(d => d.month).filter(d => d.airport === defaultAirport);
-    //console.log(months);
-    //let lateArrival = [...new Set(myData.map(d => d.arr_delayed))].filter(d => d.airport === defaultAirport);
-    //console.log(lateArrival);
-    
-    // works but stored as dictionary
-    //const arrDelayedByAirport = {};
-    //myData.forEach(data => {
-      //const { airport, arr_delayed } = data;
-      //if (arrDelayedByAirport[airport]) {
-        //arrDelayedByAirport[airport] += arr_delayed;
-      //} else {
-        //arrDelayedByAirport[airport] = arr_delayed;
-      //}
-    //});
-    //console.log(arrDelayedByAirport);
-    
-    //for (let i = 0; i < data.length; i++) {
-        //let months = data[i].month;
-        //console.log(months);
-        //let lateArrival = data[i].arr_delayed;
-        //console.log(lateArrival);
-        //let filterLateArrival = lateArrival.filter(d => d.airport === defaultAirport);
-
-        //let lateArrival = [...new Set(myData.map(d => d.arr_delayed))].filter(d => d.airport === defaultAirport);
-  
-    
-  
-    //const defaultData = myData.filter(d => d.airport === defaultAirport);
-            //let carrierCancellation = data[i].carrier_ct; // are these carrier cancellations?
-            //let filterarrierCancellation = carrierCancellation.filter(sample => dataPromise[i].airport === airport);
-    //};
-
-        // Line Chart
-        //let cancellations = {
-            //x: filterLateArrival,
-            //y: months,
-            //type: 'scatter'
-          //};
-          
-          //let delays = {
-            //x: filterarrierCancellation,
-            //y: months,
-            //type: 'scatter'
-          //};
-          
-          //let lineData = [cancellations, delays];
-          
-          //Plotly.newPlot("line", lineData);
-
-        // Bar Chart 
-        // let graphData = {
-            // x: sampleValueTop10,
-            //y: otuIdTop10,
-            //text: otuLabelTop10,
-            //type: "bar",
-            //orientation: "h"
-        //};
-  
-        // Data trace array
-        //let traceData = [graphData];
-
-        //let layout = {
-            //height: 600,
-            //: 800
-        //};
-    
-        //Plotly.newPlot("bar", traceData, layout);
+    }  
 
     init();
   }
