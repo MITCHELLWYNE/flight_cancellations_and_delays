@@ -127,7 +127,7 @@ d3.json(url).then(function(data) {
         // Extracting the month and arr_delayed values
         const DelPoints = data.map(data => ({
             month: data.month,
-            arr_flights: data.arr_flights
+            arr_del15: data.arr_del15
         }));
     
         // Sorting the DelPoints array based on the month
@@ -135,7 +135,7 @@ d3.json(url).then(function(data) {
     
         // Creating arrays for x-axis (months) and y-axis (arr_flights)
         const xDataDel = DelPoints.map(data => data.month);
-        const yDataDel = DelPoints.map(data => data.arr_flights);
+        const yDataDel = DelPoints.map(data => data.arr_del15);
 
         // Extracting the month and arr_cancelled values
         const CalPoints = data.map(data => ({
