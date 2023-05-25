@@ -9,12 +9,6 @@
 d3.json(url).then(function(data) {
     const myData = data;
     console.log(myData);
-
-    // Define variables to store the line graph data
-    let xDataDelA = [];
-    let yDataDelA = [];
-    let xDataCanA = [];
-    let yDataCanA = [];
   
     function init() {
       const airports = [...new Set(myData.map(d => d.airport))].sort();
@@ -28,7 +22,7 @@ d3.json(url).then(function(data) {
       dropdown.value = defaultAirport;
   
       createTable(defaultData);
-      LineGraph(defaultData);
+      Graph(defaultData);
   
     }
   
@@ -47,7 +41,7 @@ d3.json(url).then(function(data) {
         const selectedAirport = dropdown.value;
         const filteredData = myData.filter(d => d.airport === selectedAirport);
         createTable(filteredData);
-        LineGraph(filteredData);
+        Graph(filteredData);
       });
     }
   
@@ -128,7 +122,7 @@ d3.json(url).then(function(data) {
 
     
     // Test 
-    function LineGraph(data) {
+    function Graph(data) {
 
         // Extracting the month and arr_delayed values
         const DelPoints = data.map(data => ({
@@ -146,7 +140,7 @@ d3.json(url).then(function(data) {
         // Extracting the month and arr_cancelled values
         const CalPoints = data.map(data => ({
             month: data.month,
-            arr_flights: data.arr_cancelled
+            arr_cancelled: data.arr_cancelled
         }));
     
         // Sorting the CalPoints array based on the month
@@ -157,22 +151,22 @@ d3.json(url).then(function(data) {
         const yDataCan = CalPoints.map(data => data.arr_cancelled);
     
         // Creating a line graph 
-        // Line Chart
+        // Chart
           let delays = {
             x: xDataDel,
             y: yDataDel,
-            type: 'line'
+            type: 'bar'
           };
 
           let cancellations = {
             x: xDataCan,
             y: yDataCan,
-            type: 'line'
+            type: 'bar'
           };
           
-          let lineData = [delays, cancellations];
+          let ChartData = [delays, cancellations];
           
-          Plotly.newPlot("bar", lineData);
+          Plotly.newPlot("bar", ChartData);
         
     }  
 
