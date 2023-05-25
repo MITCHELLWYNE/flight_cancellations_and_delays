@@ -4,6 +4,7 @@
 
 // =================================================================================
 
+// THIS VERSION WORKS FOR UPDATING THE GRAPH AND TABLE
 
 // Ariel's Code
 d3.json(url).then(function(data) {
