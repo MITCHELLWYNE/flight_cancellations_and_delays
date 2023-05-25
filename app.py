@@ -54,6 +54,5 @@ def airline_delay_cause():
     return jsonify ([dict(_) for _ in results])
 
 
-
 if __name__ == '__main__':
     app.run(debug=True)
