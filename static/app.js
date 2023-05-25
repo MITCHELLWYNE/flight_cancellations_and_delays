@@ -1,5 +1,3 @@
-
-
 d3.json(url).then(function(data) {
   const myData = data;
   console.log(myData);
@@ -19,6 +17,7 @@ d3.json(url).then(function(data) {
 
   }
 
+  //Drop down menu by distinct airport (sorted alphebatically)
   function populateDropdown(elementId, options) {
     const dropdown = document.getElementById(elementId);
     dropdown.innerHTML = "";
@@ -64,51 +63,60 @@ d3.json(url).then(function(data) {
     });
   }
 
+  //Table of delay rate & cancellation rate by airport (sorted by delay rate descending)
   function createTable(data) {
     const processedData = calculateRates(data);
 
-    // Create the table element
+    
     const table = document.createElement("table");
     table.style.borderCollapse = "collapse";
     table.style.textAlign = "center";
 
-    // Create the table header row
+    
     const headerRow = table.insertRow();
     headerRow.style.border = "1px solid black";
     const airlineHeader = headerRow.insertCell();
     airlineHeader.textContent = "Airline";
     airlineHeader.style.border = "1px solid black";
-    airlineHeader.classList.add("bold");
-    const cancellationRateHeader = headerRow.insertCell();
-    cancellationRateHeader.textContent = "Cancellation Rate (%)";
-    cancellationRateHeader.style.border = "1px solid black";
     const delayRateHeader = headerRow.insertCell();
     delayRateHeader.textContent = "Delay Rate (%)";
     delayRateHeader.style.border = "1px solid black";
-
-
-    // Create table rows
+    const cancellationRateHeader = headerRow.insertCell();
+    cancellationRateHeader.textContent = "Cancellation Rate (%)";
+    cancellationRateHeader.style.border = "1px solid black";
+    
     processedData.forEach(function(d) {
       const row = table.insertRow();
       row.style.border = "1px solid black";
       const airlineCell = row.insertCell();
       airlineCell.textContent = d.airline;
       airlineCell.style.border = "1px solid black";
-      const cancellationRateCell = row.insertCell();
-      cancellationRateCell.textContent = d.cancellationRate;
-      cancellationRateCell.style.border = "1px solid black";
       const delayRateCell = row.insertCell();
       delayRateCell.textContent = d.delayRate;
       delayRateCell.style.border = "1px solid black";
+      const cancellationRateCell = row.insertCell();
+      cancellationRateCell.textContent = d.cancellationRate;
+      cancellationRateCell.style.border = "1px solid black";
     });
 
-    // Clear the previous table content
     const tableContainer = document.getElementById("table");
     tableContainer.innerHTML = "";
-
-    // Append the table to the container
+  
     tableContainer.appendChild(table);
+    
+    const rows = Array.from(table.rows).slice(1); 
+    rows.sort(function(a, b) {
+      const delayRateA = parseFloat(a.cells[1].textContent);
+      const delayRateB = parseFloat(b.cells[1].textContent);
+      return delayRateB - delayRateA; 
+    });
+
+    rows.forEach(function(row) {
+      table.appendChild(row);
+    });
   }
+
+  
 
   init();
 });
