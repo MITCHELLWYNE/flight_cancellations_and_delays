@@ -1,6 +1,6 @@
 // =================================================================================
 
-// THIS ONLY RUNS IF I PYTHON3 APP.PY RUN APP.PY IN THE TERMINAL AND HAVE THE JSON PAGE OPEN
+// THIS ONLY RUNS IF I PYTHON3 APP5.PY RUN APP5.PY IN THE TERMINAL AND HAVE THE JSON PAGE OPEN
 
 // =================================================================================
 
@@ -86,13 +86,12 @@ d3.json(url).then(function(data) {
       const airlineHeader = headerRow.insertCell();
       airlineHeader.textContent = "Airline";
       airlineHeader.style.border = "1px solid black";
-      airlineHeader.classList.add("bold");
-      const cancellationRateHeader = headerRow.insertCell();
-      cancellationRateHeader.textContent = "Cancellation Rate (%)";
-      cancellationRateHeader.style.border = "1px solid black";
       const delayRateHeader = headerRow.insertCell();
       delayRateHeader.textContent = "Delay Rate (%)";
       delayRateHeader.style.border = "1px solid black";
+      const cancellationRateHeader = headerRow.insertCell();
+      cancellationRateHeader.textContent = "Cancellation Rate (%)";
+      cancellationRateHeader.style.border = "1px solid black";
   
   
       // Create table rows
@@ -102,12 +101,12 @@ d3.json(url).then(function(data) {
         const airlineCell = row.insertCell();
         airlineCell.textContent = d.airline;
         airlineCell.style.border = "1px solid black";
-        const cancellationRateCell = row.insertCell();
-        cancellationRateCell.textContent = d.cancellationRate;
-        cancellationRateCell.style.border = "1px solid black";
         const delayRateCell = row.insertCell();
         delayRateCell.textContent = d.delayRate;
         delayRateCell.style.border = "1px solid black";
+        const cancellationRateCell = row.insertCell();
+        cancellationRateCell.textContent = d.cancellationRate;
+        cancellationRateCell.style.border = "1px solid black";
       });
   
       // Clear the previous table content
@@ -116,6 +115,17 @@ d3.json(url).then(function(data) {
   
       // Append the table to the container
       tableContainer.appendChild(table);
+
+      const rows = Array.from(table.rows).slice(1); 
+      rows.sort(function(a, b) {
+        const delayRateA = parseFloat(a.cells[1].textContent);
+        const delayRateB = parseFloat(b.cells[1].textContent);
+        return delayRateB - delayRateA; 
+      });
+        
+      rows.forEach(function(row) {
+        table.appendChild(row);
+      });
     }
 
     /////////////////////////////////////////////
@@ -135,7 +145,7 @@ d3.json(url).then(function(data) {
     
         // Creating arrays for x-axis (months) and y-axis (arr_flights)
         const xDataDel = DelPoints.map(data => data.month);
-        const yDataDel = DelPoints.map(data => data.arr_del15);
+        const yDataDel = DelPoints.map(data => data.arr_del15); 
 
         // Extracting the month and arr_cancelled values
         const CalPoints = data.map(data => ({
@@ -155,18 +165,32 @@ d3.json(url).then(function(data) {
           let delays = {
             x: xDataDel,
             y: yDataDel,
+            name: "Delays",
             type: 'bar'
           };
 
           let cancellations = {
             x: xDataCan,
             y: yDataCan,
+            name: "Cancellations",
             type: 'bar'
           };
+
+          let layout = {
+            height: 600,
+            width: 800,
+            title: "Cancelled and Delayed Flights by Airport for the Year 2022",
+            xaxis: {
+                title: 'Months'
+              },
+              yaxis: {
+                title: 'Number of Cancelled / Delayed Flights'
+              }
+           };
           
           let ChartData = [delays, cancellations];
           
-          Plotly.newPlot("bar", ChartData);
+          Plotly.newPlot("bar", ChartData, layout);
         
     }  
 
