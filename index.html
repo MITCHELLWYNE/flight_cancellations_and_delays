@@ -6,7 +6,7 @@
     <meta name="description"
           content="Interactive dashboard that allows analysis of flight delays and cancellations within the United States.">
     <meta name="keywords"
-          content="javascript, css, d3, html, api, bootstrap, jquery, flask, plotly, songs, plotlyjs, select2, d3js, flask-api, frozen-flask, bootstrap5, bootstrap-icons">
+          content="javascript, css, d3, html, api, bootstrap, flask, plotly, songs, plotlyjs, select2, d3js, flask-api">
 
     <title>Flight Cancellations and Delays in the United States in 2022</title>
 
@@ -22,10 +22,10 @@
 
     <!-- Plotly   -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <header>
     <nav id="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
@@ -53,41 +53,39 @@
     </div>
 </header>
 <main class="container">
-</main>
-</body>
-</html>
-<!--Airport-->
-    <div class="row">
-      <div class="col-md-2">
-        <div class="well">
-          <h5>By Airport:</h5>
-          <select id="selAirport" onchange="optionChanged('airport', this.value)"></select>
-        </div>
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Airport Info</h3>
-          </div>
-          <div id="sample-metadata" class="panel-body"></div>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div id="bar"></div>
-      </div>
-      <div class="col-md-5">
-        <div id="table"></div>
-      </div>
+<!--airport-->
+  
+<div class="row">
+  <div class="col-md-9 col-sm-12">
+    <div class="well">
+      <h5>By Airport:</h5>
+      <select id="selAirport" onchange="optionChanged('airport', this.value)"></select>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="bubble"></div>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Airport Information</h3>
       </div>
+      <div id="sample-metadata" class="panel-body"></div>
     </div>
   </div>
-
+</div>
+<div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 plot" id="bar"></div>
+  </div>
+</div>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-sm-12 plot" id="table"></div>
+  </div>
+</div>
+  
+  
   <script>const url = "http://127.0.0.1:5000/api/airline_delay_cause.json";;</script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="./static/app.js"></script>
 
+</main>
+</body>
 </html>
-
