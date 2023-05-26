@@ -43,7 +43,7 @@ function createHeatmap() {
     document.getElementById("heatmap").innerHTML = "";
 
     // Create the heatmap
-    var heatmap = d3.select("heatmap")
+    var heatmap = d3.select("#heatmap")
       .selectAll("div")
       .data(heatmapData)
       .enter()
@@ -52,7 +52,7 @@ function createHeatmap() {
       .style("height", "20px") 
       .style("background-color", function(d) {
         
-        return d3.interpolateBlues(d[selectedOption] / 100); 
+        return d3.interpolateBlues(d[selectedOption] / 50); 
       });
   });
 }
