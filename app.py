@@ -6,7 +6,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 
 #################################################
@@ -34,16 +34,25 @@ CORS(app)
 # Flask Routes
 #################################################
 @app.route("/")
-def home():
-    return (
-        f"Available Routes:<br/>"
-        f"api/airline_delay_cause.json<br/>"
-    )
+def index():
+    return render_template(
+       "index.html", pages={
+        "airport": "active",
+        "airline": ""
+    })
+
+@app.route("/airline")
+def airline():
+    return render_template("airline.html", pages={
+        "airport": "",
+        "airline": "active"
+    })
 
 @app.route("/api/airline_delay_cause.json")
 def airline_delay_cause():
     results = engine.execute("SELECT * FROM airline_delay_cause")
     return jsonify ([dict(_) for _ in results])
+
 
 
 if __name__ == '__main__':
