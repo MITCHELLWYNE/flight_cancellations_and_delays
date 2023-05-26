@@ -21,6 +21,11 @@ var heatmap = d3.select("heatmap_element")
 });
 
 
+function init( {
+    let dropdownMenu = d3.select("selDataset")
+})
+
+
 // d3.csv("C:\\Users\\mitch\\flight_cancellations_and_delays\\Airline_Delay_Cause 2022.csv").then(function(data) {
 //     // Parse the CSV data
 //     var parsedData = data.map(function(d) {

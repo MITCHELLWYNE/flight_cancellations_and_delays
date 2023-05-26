@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Heatmap </title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
+  <script src="app3.js"></script>
+</head>
+<body>
+  <h2>Select Carrier:</h2>
+  <select id="carrierDropdown" onchange="changeOption()">
+    <option value="carrier_delay">Carrier Delay</option>
+    <option value="arr_del15">Arrival Delay > 15 minutes</option>
+    <option value="arr_cancelled">Arrival Flights Cancelled</option>
+  </select>
+  <div id="heatmap"></div>
+</body>
+</html>
