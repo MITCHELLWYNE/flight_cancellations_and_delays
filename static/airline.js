@@ -16,7 +16,7 @@ d3.json(url).then(function(data) {
   
       createTable(defaultData);
       Graph(defaultData);
-  
+      Metadata(defaultData);
     }
   
     function populateDropdown(elementId, options) {
@@ -35,6 +35,7 @@ d3.json(url).then(function(data) {
         const filteredData = myData.filter(d => d.carrier_name === selectedAirline);
         createTable(filteredData);
         Graph(filteredData);
+        Metadata(filteredData);
       });
     }
   
@@ -186,6 +187,70 @@ d3.json(url).then(function(data) {
       Plotly.newPlot("bar", ChartData, layout);
     
 }  
+
+//////////////////////////////
+function Metadata(data) {
+
+  // Extracting the carrier_ct values
+  let InfoData = data.map(data => ({
+    airline_name: data.carrier_name,
+    arr_del15: data.arr_del15,
+    nas_ct: data.nas_ct,
+    carrier_ct: data.carrier_ct,
+    weather_ct: data.weather_ct,
+    security_ct: data.security_ct,
+    late_aircraft: data.late_aircraft
+  }));
+
+  //console.log(InfoData[0])
+
+  let AirlineName = Object.values(InfoData[0])[0];
+  let carrierDel = InfoData.map(data => data.carrier_ct);
+  let carrierDelSum = carrierDel.reduce(function(a, b){
+    return a + b;
+    });
+  let nasDel = InfoData.map(data => data.nas_ct);
+  let nasDelSum = nasDel.reduce(function(a, b){
+    return a + b;
+    });
+  let weatherDel = InfoData.map(data => data.weather_ct);
+  let weatherDelSum = weatherDel.reduce(function(a, b){
+    return a + b;
+    });
+  let securityDel = InfoData.map(data => data.security_ct);
+  let securityDelSum = securityDel.reduce(function(a, b){
+    return a + b;
+    });
+
+  let lateAircraftDel = InfoData.map(data => data.late_aircraft);
+  let lateAircraftDelSum = lateAircraftDel.reduce(function(a, b){
+    return a + b;
+    });
+
+  let totalDel = InfoData.map(data => data.arr_del15);
+  let totalDelSum = totalDel.reduce(function(a, b){
+    return a + b;
+    });
+
+  let displayData = {
+    Airline_Name: AirlineName,
+    Total_Delayed_Flights: totalDelSum,
+    Air_Carrier_Delays: carrierDelSum,
+    NAS_Delays: nasDelSum,
+    Weather_Delays: weatherDelSum,
+    Security_Delays: securityDelSum,
+    Late_Arrival_Delays: lateAircraftDelSum
+  }
+
+  // Select metadata location in html file
+  d3.select("#sample-metadata").html("");
+  // Append each key-value pair 
+  Object.entries(displayData).forEach(([key, value]) => {
+    console.log(key, value);
+  d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
+  });
+ }
+
 
 init();
 }
