@@ -1,12 +1,10 @@
 // =================================================================================
 
-// THIS ONLY RUNS IF I PYTHON3 APP5.PY RUN APP5.PY IN THE TERMINAL AND HAVE THE JSON PAGE OPEN
+// THIS ONLY RUNS IF I PYTHON3 APP6.PY RUN APP6.PY IN THE TERMINAL AND HAVE THE JSON PAGE OPEN
 
 // =================================================================================
 
-// THIS VERSION TRIES TO ADD THE EXTRA INFORMATION DATA TO THE BOX
-
-// Ariel's Code
+// Completed Version
 d3.json(url).then(function(data) {
     const myData = data;
     console.log(myData);
@@ -131,58 +129,78 @@ d3.json(url).then(function(data) {
       });
     }
 
-    /////////////////////////////////////////////
-
     
     // Graph
     function Graph(data) {
 
-        // Extracting the month and arr_delayed values
-        const DelPoints = data.map(data => ({
-            month: data.month,
-            arr_del15: data.arr_del15
-        }));
-    
-        // Sorting the DelPoints array based on the month
-        DelPoints.sort((a, b) => a.month - b.month);
-    
-        // Creating arrays for x-axis (months) and y-axis (arr_flights)
-        const xDataDel = DelPoints.map(data => data.month);
-        const yDataDel = DelPoints.map(data => data.arr_del15); 
+        // Delays
+        // Initialize object to store monthly sums
+        const monthlySums = {};
 
-        // Extracting the month and arr_cancelled values
-        const CalPoints = data.map(data => ({
-            month: data.month,
-            arr_cancelled: data.arr_cancelled
-        }));
-    
-        // Sorting the CalPoints array based on the month
-        CalPoints.sort((a, b) => a.month - b.month);
+        // Iterate over data array
+        data.forEach(dataPoint => {
+        const month = dataPoint.month;
+        const yValue = dataPoint.arr_del15;
 
-        // Creating arrays for x-axis (months) and y-axis (arr_cancelled)
-        const xDataCan = CalPoints.map(data => data.month);
-        const yDataCan = CalPoints.map(data => data.arr_cancelled);
-    
+        // Check if month exists in monthly sums
+        if (monthlySums.hasOwnProperty(month)) {
+            // Add yValue to existing sum for that month
+            monthlySums[month] += yValue;
+        } else {
+            // Create new entry for the month with yValue as initial sum
+            monthlySums[month] = yValue;
+        }
+        });
+
+        // Extract x-axis (months) and y-axis (sum of y-values) data
+        const xDataDelay = Object.keys(monthlySums).map(month => parseInt(month));
+        const yDataDelay = Object.values(monthlySums);
+
+        // Cancellations
+        // Initialize object to store monthly sums
+        const monthlySumsCancel = {};
+
+        // Iterate over data array
+        data.forEach(dataPoint => {
+        const monthCancel = dataPoint.month;
+        const yValueCancel = dataPoint.arr_cancelled;
+        
+        // Check if month exists in monthly sums
+        if (monthlySumsCancel.hasOwnProperty(monthCancel)) {
+            // Add yValue to existing sum for that month
+            monthlySumsCancel[monthCancel] += yValueCancel;
+        } else {
+            // Create new entry for the month with yValue as initial sum
+            monthlySumsCancel[monthCancel] = yValueCancel;
+        }
+        });
+        
+        // Extract x-axis (months) and y-axis (sum of y-values) data
+        const xDataCancel = Object.keys(monthlySumsCancel).map(month => parseInt(month));
+        const yDataCancel = Object.values(monthlySumsCancel);
+
+
         // Creating a line graph 
         // Chart
           let delays = {
-            x: xDataDel,
-            y: yDataDel,
+            x: xDataDelay,
+            y: yDataDelay,
             name: "Delays",
-            type: 'bar'
+            type: 'line',
           };
 
           let cancellations = {
-            x: xDataCan,
-            y: yDataCan,
+            x: xDataCancel,
+            y: yDataCancel,
             name: "Cancellations",
-            type: 'bar'
+            type: 'line',
           };
 
           let layout = {
             height: 600,
             width: 800,
             title: "Cancelled and Delayed Flights by Airport for the Year 2022",
+            barmode: 'group',
             xaxis: {
                 title: 'Months'
               },
@@ -209,8 +227,6 @@ d3.json(url).then(function(data) {
             security_ct: data.security_ct,
             late_aircraft: data.late_aircraft
         }));
-
-        //console.log(InfoData[0])
 
         let AirportName = Object.values(InfoData[0])[0];
         let carrierDel = InfoData.map(data => data.carrier_ct);
