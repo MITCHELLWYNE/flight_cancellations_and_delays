@@ -229,28 +229,38 @@ d3.json(url).then(function(data) {
         }));
 
         let AirportName = Object.values(InfoData[0])[0];
+
         let carrierDel = InfoData.map(data => data.carrier_ct);
         let carrierDelSum = carrierDel.reduce(function(a, b){
             return a + b;
           });
+        carrierDelSum = carrierDelSum.toFixed(2);
+
         let nasDel = InfoData.map(data => data.nas_ct);
         let nasDelSum = nasDel.reduce(function(a, b){
             return a + b;
           });
+        nasDelSum = nasDelSum.toFixed(2);
+
         let weatherDel = InfoData.map(data => data.weather_ct);
         let weatherDelSum = weatherDel.reduce(function(a, b){
             return a + b;
           });
+        weatherDelSum = weatherDelSum.toFixed(2);
+
         let securityDel = InfoData.map(data => data.security_ct);
         let securityDelSum = securityDel.reduce(function(a, b){
             return a + b;
           });
+        securityDelSum = securityDelSum.toFixed(2);
 
+          
         let lateAircraftDel = InfoData.map(data => data.late_aircraft);
         let lateAircraftDelSum = lateAircraftDel.reduce(function(a, b){
             return a + b;
           });
-
+        lateAircraftDelSum = lateAircraftDelSum.toFixed(2);
+          
         let totalDel = InfoData.map(data => data.arr_del15);
         let totalDelSum = totalDel.reduce(function(a, b){
             return a + b;
