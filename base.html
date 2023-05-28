@@ -22,18 +22,6 @@
     <!-- Plotly   -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- jQuery -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
-            integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
-
-    <!-- Select 2 -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>-->
-
-    <!-- Bootstrap Icons -->
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">-->
-
-    {% load staticfiles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
@@ -41,7 +29,7 @@
 <header>
     <nav id="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
-            <a class="navbar-brand" href="airport.html" >Flight Cancellations and Delays in the United States in 2022</a>
+            <a class="navbar-brand" href="base.html" >Flight Cancellations and Delays in the United States in 2022</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,23 +44,6 @@
                         <a class="nav-link {{pages['airline']}}" href="airline.html">Airline</a>
                     </li>
                 </ul>
-                <!--<a id="github-link" href="https://github.com/compmonk/SongStats" target="_blank" rel="noreferrer">
-                    <button class="btn" type="submit">
-                        <i class="bi bi-github"></i>
-                    </button>
-                </a>
-                <button id="light-mode" class="btn hide" type="submit">
-                    <i class="bi bi-brightness-high-fill"></i>
-                </button>
-                <button id="dark-mode" class="btn" type="submit">
-                    <i class="bi bi-moon-fill"></i>
-                </button>
-            </div>
-        </div>-->
-
-        <!-- <a href="index.html">Home</a>
-        <a href="airline.html">Airline</a>
-        <a href="airport.html">Airport</a> -->
     </nav>
     <div class="container">
         <div class="header text-center">
@@ -81,10 +52,24 @@
     </div>
 </header>
 <main class="container">
+
+<div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12 plot" id="bar"></div>
+    </div>
+</div> 
+<div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12 plot" id="bar1"></div>
+    </div>
+</div> 
+
+    <script>const url = "http://127.0.0.1:5000/api/airline_financial.json";;</script>
+    <script>const url_1 = "http://127.0.0.1:5000/api/airline_delay_cause.json";;</script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="./static/base.js"></script>
+
 </main>
 </body>
 </html>
-
-{% block content %}
-
-{% end block %}
