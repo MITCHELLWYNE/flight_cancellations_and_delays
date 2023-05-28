@@ -53,55 +53,58 @@ d3.json(url_1).then(function(data_1) {
   
 
   function delayBarChart() {
-    //const airlines = [...new Set(myData_1.map(item => item.carrier_name))];
-    const airlines = ['Southwest Airlines Co.',
-      'American Airlines Inc.',
-      'Delta Air Lines Inc.',
-      'SkyWest Airlines Inc.',
-      'United Air Lines Inc.',
-      'JetBlue Airways',
-      'Republic Airline',
-      'Spirit Air Lines',
-      'Frontier Airlines Inc.',
-      'Alaska Airlines Inc.',
-      'Envoy Air',
-      'PSA Airlines Inc.',
-      'Allegiant Air',
-      'Endeavor Air Inc.',
-      'Mesa Airlines Inc.',
-      'Hawaiian Airlines Inc.',
-      'Horizon Air']
+    // const airlines = [...new Set(myData_1.map(item => item.carrier_name))];
+    const airlines = ['Allegiant Air',
+    'JetBlue Airways',
+    'Frontier Airlines Inc.',
+    'Spirit Air Lines',
+    'Southwest Airlines Co.',
+    'Hawaiian Airlines Inc.',
+    'American Airlines Inc.',
+    'Alaska Airlines Inc.',
+    'Mesa Airlines Inc.',
+    'United Air Lines Inc.',
+    'PSA Airlines Inc.',
+    'Republic Airline',
+    'Envoy Air',
+    'Horizon Air',
+    'SkyWest Airlines Inc.',
+    'Endeavor Air Inc.',
+    'Delta Air Lines Inc.']
+
     // const delayData = airlines.map(airline => {
     //   const airlineData = myData_1.filter(item => item.carrier_name === airline);
     //   const sumDelay = airlineData.reduce((sum, item) => sum + item.arr_del15, 0);
+    //   const sumArr = airlineData.reduce((sum, item) => sum + item.arr_flights, 0);
     //   return {
     //     airline: airline,
-    //     sumDelays: sumDelay
+    //     delayRate: sumDelay / sumArr
     //   };
     // });
-    const delayData = [305255,
-      190872,
-      140056,
-      119580,
-      118018,
-      85373,
-      58949,
-      55480,
-      47981,
-      45003,
-      41891,
-      40071,
-      38373,
-      36473,
-      21795,
-      17131,
-      14497]
-      //const sortedData = delayData.sort((a, b) => b.sumDelays - a.sumDelays);
+    const delayRate = [32.83,
+      31.27,
+      30.86,
+      23.87,
+      23.35,
+      23.19,
+      21.84,
+      19.70,
+      18.99,
+      18.84,
+      18.69,
+      18.62,
+      16.89,
+      16.33,
+      16.30,
+      15.73,
+      15.68]
+
+      // const sortedData = delayData.sort((a, b) => b.delayRate - a.delayRate);
 
       // const xData = sortedData.map(item => item.airline); 
       // const yData = sortedData.map(item => item.sumDelays);
       const xData = airlines;
-      const yData = delayData;
+      const yData = delayRate;
 
       let trace = {
           x: xData,
@@ -112,13 +115,12 @@ d3.json(url_1).then(function(data_1) {
       let layout = {
           height: 400,
           width: 1200,
-          title: 'Total Delay Counts by Airline in 2022',
+          title: 'Delay Rate by Airline in 2022',
           xaxis: {
               title: 'Airline'
           },
           yaxis: {
-              title: 'Total Count',
-              tickformat: ',.0f'
+              title: '(%)'
           }
       };
 
