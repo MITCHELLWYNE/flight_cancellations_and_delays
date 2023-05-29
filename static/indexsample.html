@@ -1,21 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Airline Delay Cancellation Risk</title>
-  
+  <title>Heatmap Example</title>
+  <style>
+    /* Add your custom CSS styling here */
+    .heatmap {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .heatmap-cell {
+      width: 50px;
+      height: 50px;
+      border: 1px solid black;
+      box-sizing: border-box;
+    }
+    .x-label {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h2>Select Carrier:</h2>
-  <select id="carrierDropdown" onchange="changeOption()">
-    <option value="carrier_delay">Carrier Delay</option>
-    <option value="arr_del15">Arrival Delay > 15 minutes</option>
-    <option value="arr_cancelled">Arrival Flights Cancelled</option>
-  </select>
-  <div id="heatmap"></div>
-  
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
-  <script src="app3.js"></script>
+  <h1>Heatmap Example</h1>
 
+  <div>
+    <label for="arrDel15Dropdown">arr_del15:</label>
+    <select id="arrDel15Dropdown"></select>
+  </div>
+
+  <div>
+    <label for="arrCancelledDropdown">arr_cancelled:</label>
+    <select id="arrCancelledDropdown"></select>
+  </div>
+
+  <div id="heatmap"></div>
+  <script>const url = "http://127.0.0.1:5000/api/airline_delay_cause.json";;</script>
+  <!-- Include the D3.js library -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Include your JavaScript file -->
+  <script src="app3.js"></script>
 </body>
 </html>
