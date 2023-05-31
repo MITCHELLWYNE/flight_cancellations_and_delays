@@ -1,42 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Heatmap Example</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delayed and Cancelled Risks</title>
   <style>
-    /* Add your custom CSS styling here */
     .heatmap {
       display: flex;
       flex-wrap: wrap;
+      align-content: flex-start;
+      padding: 10px;
     }
+
+    .heatmap-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-basis: calc(100% / 6); 
+      margin-bottom: 4px;
+    }
+
     .heatmap-cell {
-      width: 50px;
-      height: 50px;
-      border: 1px solid black;
-      box-sizing: border-box;
+      flex-grow: 1;
+      height: 75px;
+      margin-right: 4px;
     }
-    .x-label {
-      text-align: center;
+
+    .y-label {
+      margin-bottom: 10px;
     }
+
+
   </style>
+  
 </head>
+
 <body>
-  <h1>Heatmap Example</h1>
+  <h1>Delayed Risks</h1>
 
   <div>
-    <label for="arrDel15Dropdown">arr_del15:</label>
-    <select id="arrDel15Dropdown"></select>
-  </div>
+    <label for="carrierDropdown">Select Carrier:</label>
+    <select id="carrierDropdown"></select>
+  </div> 
 
   <div>
-    <label for="arrCancelledDropdown">arr_cancelled:</label>
-    <select id="arrCancelledDropdown"></select>
+    <label for="airportDropdown">Select Airport:</label>
+    <select id="airportDropdown"></select>
   </div>
 
   <div id="heatmap"></div>
   <script>const url = "http://127.0.0.1:5000/api/airline_delay_cause.json";;</script>
-  <!-- Include the D3.js library -->
+  <script src="https://d3js.org/d3-array.v2.min.js"></script>
+  <script src="https://d3js.org/d3-fetch.v2.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <!-- Include your JavaScript file -->
   <script src="app3.js"></script>
+
 </body>
+
 </html>
+  
