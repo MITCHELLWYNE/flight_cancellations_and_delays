@@ -40,7 +40,8 @@ def index():
         "airport": "",
         "airline": "",
         "compare": "active",
-        "app3": ""
+        "app3": "",
+        "appcanc": ""
     })
 
 @app.route("/airline")
@@ -49,7 +50,8 @@ def airline():
         "airport": "",
         "airline": "active",
         "compare": "",
-        "app3": ""
+        "app3": "",
+        "appcanc": ""
     })
 
 @app.route("/airport")
@@ -58,7 +60,8 @@ def airport():
         "airport": "active",
         "airline": "",
         "compare": "",
-        "app3": ""
+        "app3": "",
+        "appcanc": ""
     })
 
 @app.route("/compare")
@@ -68,16 +71,28 @@ def compare():
         "airport": "",
         "airline": "",
         "compare": "active",
-        "app3": ""
+        "app3": "",
+        "appcanc": ""
     })
 
-@app.route("/heatmap")
+@app.route("/delays")
 def heatmap():
     return render_template("indexsample.html", pages={
         "airport": "",
         "airline": "",
         "compare": "",
-        "app3": "active"
+        "app3": "active",
+        "appcanc": ""
+    })
+
+@app.route("/cancellations")
+def cancels():
+    return render_template("indexcanc.html", pages={
+        "airport": "",
+        "airline": "",
+        "compare": "",
+        "app3": "",
+        "appcanc": "active"
     })
 
 @app.route("/api/airline_delay_cause.json")

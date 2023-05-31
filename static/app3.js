@@ -1,97 +1,113 @@
 d3.json(url).then(function(data) {
-  // Extract the unique airports and carrier names from the data
-  const airports = [...new Set(data.map(item => item.airport))];
-  const carrierNames = [...new Set(data.map(item => item.carrier_name))];
+  // Extract unique months and airports from the data
+  var carriers = [...new Set(data.map(item => item.carrier_name))];
+  var airports = [...new Set(data.map(item => item.airport_name))];
 
-  // Create the dropdown menu for arr_del15
-  const arrDel15Dropdown = d3.select('#arrDel15Dropdown');
-  airports.forEach(function(airport) {
-    arrDel15Dropdown.append('option').attr('value', airport).text(airport);
+  // console.log(carriers);
+  console.log(airports);
+
+  // Create the dropdown menu for month
+  var carrierDropdown = d3.select("#carrierDropdown");
+  carriers.forEach(function(carrier_name) {
+    carrierDropdown.append("option").attr("value", carrier_name).text(carrier_name);
   });
 
-  // Create the dropdown menu for arr_cancelled
-  const arrCancelledDropdown = d3.select('#arrCancelledDropdown');
-  carrierNames.forEach(function(carrierName) {
-    arrCancelledDropdown.append('option').attr('value', carrierName).text(carrierName);
+  // Create the dropdown menu for airport
+  var airportDropdown = d3.select("#airportDropdown");
+  airports.forEach(function(airport_name) {
+    airportDropdown.append("option").attr("value", airport_name).text(airport_name);
   });
 
   // Define the initial selected values
-  let selectedArrDel15 = arrDel15Dropdown.property('value');
-  let selectedArrCancelled = arrCancelledDropdown.property('value');
+  var selectedCarrier = carrierDropdown.property("value");
+  var selectedAirport = airportDropdown.property("value");
 
-  // Function to handle arr_del15 dropdown change
-  function changeArrDel15() {
-    selectedArrDel15 = arrDel15Dropdown.property('value');
+  console.log(selectedCarrier);
+  console.log(selectedAirport);
+
+  // Function to handle carrier dropdown change
+  function changeCarrier() {
+    selectedCarrier = carrierDropdown.property("value");
+    console.log(selectedCarrier);
     createHeatmap();
   }
 
-  // Function to handle arr_cancelled dropdown change
-  function changeArrCancelled() {
-    selectedArrCancelled = arrCancelledDropdown.property('value');
+  // Function to handle airport dropdown change
+  function changeAirport() {
+    selectedAirport = airportDropdown.property("value");
+    console.log(selectedAirport);
     createHeatmap();
   }
 
-  // Attach the change event listeners to the dropdowns
-  arrDel15Dropdown.on('change', changeArrDel15);
-  arrCancelledDropdown.on('change', changeArrCancelled);
+  // Attach change event listeners to dropdowns
+  carrierDropdown.on("change", changeCarrier);
+  airportDropdown.on("change", changeAirport);
 
   // Function to create the heatmap
   function createHeatmap() {
-    // Clear the existing heatmap
-    d3.select('#heatmap').html('');
+    
+    d3.select("#heatmap").html("");
 
     // Filter the data based on selected values
-    const filteredDataArrDel15 = data.filter(d => d.airport === selectedArrDel15);
-    const filteredDataArrCancelled = data.filter(d => d.carrier_name === selectedArrCancelled);
+    var filteredData = data.filter(function(d) {
+      return (
+        d.carrier_name === selectedCarrier &&
+        d.airport_name === selectedAirport &&
+        +d.arr_del15 > 0
+      );
+    });
+    
+    console.log(data)
+    console.log(filteredData);
 
-    // Find the minimum and maximum values for scaling the colors
-    const minValueArrDel15 = d3.min(filteredDataArrDel15, d => +d.arr_del15);
-    const maxValueArrDel15 = d3.max(filteredDataArrDel15, d => +d.arr_del15);
-    const minValueArrCancelled = d3.min(filteredDataArrCancelled, d => +d.arr_cancelled);
-    const maxValueArrCancelled = d3.max(filteredDataArrCancelled, d => +d.arr_cancelled);
-
-    // Create the x-axis labels
-    const xLabelsArrDel15 = filteredDataArrDel15.map(d => d.carrier_name);
-    const xLabelsArrCancelled = filteredDataArrCancelled.map(d => d.airport);
-
-    // Create the heatmap for arr_del15
-    const heatmapArrDel15 = d3.select('#heatmap')
-      .append('div')
-      .attr('class', 'heatmap')
-      .selectAll('.heatmap-cell')
-      .data(filteredDataArrDel15)
+    var heatmap = d3
+      .select("#heatmap")
+      .selectAll(".heatmap-row")
+      .data(filteredData)
       .enter()
-      .append('div')
-      .attr('class', 'heatmap-cell')
-      .style('background-color', d => {
-        const colorScale = d3.scaleLinear().domain([minValueArrDel15, maxValueArrDel15]).range(['blue', 'red']);
+      .append("div")
+      .attr("class", "heatmap-row")
+      .append("div")
+      .attr("class", "heatmap-cell")
+      .style("background-color", function(d) {
+       
+        var colorScale = d3
+          .scaleLinear()
+          .domain([
+            0,
+            d3.max(filteredData, function(d) {
+              return +d.arr_del15;
+            }),
+          ])
+          .range(["steelblue", "red"]);
         return colorScale(+d.arr_del15);
+      })
+      .text(function(d) {
+        return d.carrier_name; 
+      })  
+      .on("mouseover", function(d) {
+        d3.select(this).style("opacity", 2);
+        d3.select(this).append("div")
+          .attr("class", "heatmap-tooltip")
+          .text(function(d) {
+            return "Month: " +d.month + ", Arrival Delays: " + d.arr_del15;
+          });
+      })  
+      .on("mouseout", function(d) {
+        d3.select(this).style("opacity", 0.4);
+        d3.select(this).select(".heatmap-tooltip").remove();
       });
-
-    // Create the heatmap for arr_cancelled
-    const heatmapArrCancelled = d3.select('#heatmap')
-      .append('div')
-      .attr('class', 'heatmap')
-      .selectAll('.heatmap-cell')
-      .data(filteredDataArrCancelled)
-      .enter()
-      .append('div')
-      .attr('class', 'heatmap-cell')
-      .style('background-color', d => {
-        const colorScale = d3.scaleLinear().domain([minValueArrCancelled, maxValueArrCancelled]).range(['blue', 'red']);
-        return colorScale(+d.arr_cancelled);
-      });
-
-    // Set the x-axis labels
-    heatmapArrDel15.append('div')
-      .attr('class', 'x-label')
-      .text(d => d.carrier_name);
-
-    heatmapArrCancelled.append('div')
-      .attr('class', 'x-label')
-      .text(d => d.airport);
+      
+          
+    var yLabel = d3
+      .select("#heatmap")
+      .append("div")
+      .attr("class", "y-label")
+      .text("Arrival Delay"); 
   }
 
   // Call the createHeatmap function initially
   createHeatmap();
+    
+  
 });
