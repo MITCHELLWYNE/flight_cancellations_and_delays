@@ -16,7 +16,7 @@ d3.json(url).then(function(data) {
   
       createTable(defaultData);
       Graph(defaultData);
-  
+      Metadata(defaultData);
     }
   
     function populateDropdown(elementId, options) {
@@ -35,6 +35,7 @@ d3.json(url).then(function(data) {
         const filteredData = myData.filter(d => d.carrier_name === selectedAirline);
         createTable(filteredData);
         Graph(filteredData);
+        Metadata(filteredData);
       });
     }
   
@@ -125,54 +126,76 @@ d3.json(url).then(function(data) {
     //////////////////////////////
 
    // Test 
-  function Graph(data) {
+   function Graph(data) {
 
-    // Extracting the month and arr_delayed values
-    const DelPoints = data.map(data => ({
-        month: data.month,
-        arr_del15: data.arr_del15
-    }));
+    // Delays
+    // Initialize object to store monthly sums
+    const monthlySums = {};
 
-    // Sorting the DelPoints array based on the month
-    DelPoints.sort((a, b) => a.month - b.month);
+    // Iterate over data array
+    data.forEach(dataPoint => {
+    const month = dataPoint.month;
+    const yValue = dataPoint.arr_del15;
 
-    // Creating arrays for x-axis (months) and y-axis (arr_flights)
-    const xDataDel = DelPoints.map(data => data.month);
-    const yDataDel = DelPoints.map(data => data.arr_del15); 
+    // Check if month exists in monthly sums
+    if (monthlySums.hasOwnProperty(month)) {
+        // Add yValue to existing sum for that month
+        monthlySums[month] += yValue;
+    } else {
+        // Create new entry for the month with yValue as initial sum
+        monthlySums[month] = yValue;
+    }
+    });
 
-    // Extracting the month and arr_cancelled values
-    const CalPoints = data.map(data => ({
-        month: data.month,
-        arr_cancelled: data.arr_cancelled
-    }));
+    // Extract x-axis (months) and y-axis (sum of y-values) data
+    const xDataDelay = Object.keys(monthlySums).map(month => parseInt(month));
+    const yDataDelay = Object.values(monthlySums);
 
-    // Sorting the CalPoints array based on the month
-    CalPoints.sort((a, b) => a.month - b.month);
+    // Cancellations
+    // Initialize object to store monthly sums
+    const monthlySumsCancel = {};
 
-    // Creating arrays for x-axis (months) and y-axis (arr_cancelled)
-    const xDataCan = CalPoints.map(data => data.month);
-    const yDataCan = CalPoints.map(data => data.arr_cancelled);
+    // Iterate over data array
+    data.forEach(dataPoint => {
+    const monthCancel = dataPoint.month;
+    const yValueCancel = dataPoint.arr_cancelled;
+    
+    // Check if month exists in monthly sums
+    if (monthlySumsCancel.hasOwnProperty(monthCancel)) {
+        // Add yValue to existing sum for that month
+        monthlySumsCancel[monthCancel] += yValueCancel;
+    } else {
+        // Create new entry for the month with yValue as initial sum
+        monthlySumsCancel[monthCancel] = yValueCancel;
+    }
+    });
+    
+    // Extract x-axis (months) and y-axis (sum of y-values) data
+    const xDataCancel = Object.keys(monthlySumsCancel).map(month => parseInt(month));
+    const yDataCancel = Object.values(monthlySumsCancel);
+
 
     // Creating a line graph 
     // Chart
       let delays = {
-        x: xDataDel,
-        y: yDataDel,
+        x: xDataDelay,
+        y: yDataDelay,
         name: "Delays",
-        type: 'bar'
+        type: 'line',
       };
 
       let cancellations = {
-        x: xDataCan,
-        y: yDataCan,
+        x: xDataCancel,
+        y: yDataCancel,
         name: "Cancellations",
-        type: 'bar'
+        type: 'line',
       };
 
       let layout = {
         height: 600,
         width: 800,
-        title: "Cancelled and Delayed Flights by Airport for the Year 2022",
+        title: "Cancelled and Delayed Flights by Airline for the Year 2022",
+        barmode: 'group',
         xaxis: {
             title: 'Months'
           },
@@ -185,10 +208,73 @@ d3.json(url).then(function(data) {
       
       Plotly.newPlot("bar", ChartData, layout);
     
-}  
+}
+//////////////////////////////
+function Metadata(data) {
+
+  // Extracting the carrier_ct values
+  let InfoData = data.map(data => ({
+    airline_name: data.carrier_name,
+    arr_del15: data.arr_del15,
+    nas_ct: data.nas_ct,
+    carrier_ct: data.carrier_ct,
+    weather_ct: data.weather_ct,
+    security_ct: data.security_ct,
+    late_aircraft: data.late_aircraft
+  }));
+
+  //console.log(InfoData[0])
+
+  let AirlineName = Object.values(InfoData[0])[0];
+  let carrierDel = InfoData.map(data => data.carrier_ct);
+  let carrierDelSum = carrierDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+  let nasDel = InfoData.map(data => data.nas_ct);
+  let nasDelSum = nasDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+  let weatherDel = InfoData.map(data => data.weather_ct);
+  let weatherDelSum = weatherDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+  let securityDel = InfoData.map(data => data.security_ct);
+  let securityDelSum = securityDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+
+  let lateAircraftDel = InfoData.map(data => data.late_aircraft);
+  let lateAircraftDelSum = lateAircraftDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+
+  let totalDel = InfoData.map(data => data.arr_del15);
+  let totalDelSum = totalDel.reduce(function(a, b){
+    return a + b;
+    }, 0).toFixed(2);
+
+  let displayData = {
+    Airline_Name: AirlineName,
+    Total_Delayed_Flights: totalDelSum,
+    Air_Carrier_Delays: carrierDelSum,
+    NAS_Delays: nasDelSum,
+    Weather_Delays: weatherDelSum,
+    Security_Delays: securityDelSum,
+    Late_Arrival_Delays: lateAircraftDelSum
+  }
+
+  // Select metadata location in html file
+  d3.select("#sample-metadata").html("");
+  // Append each key-value pair 
+  Object.entries(displayData).forEach(([key, value]) => {
+    console.log(key, value);
+  d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
+  });
+ }
 
 init();
 }
 );
+
 
 

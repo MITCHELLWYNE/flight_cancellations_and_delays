@@ -12,7 +12,8 @@ from flask_cors import CORS
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///flight_cancellations.sqlite")
+engine = create_engine("sqlite:///flight_cancellation_data/flight_cancellations.sqlite")
+engine_1 = create_engine("sqlite:///airline_financial_data/airline_financial.sqlite")
 
 # reflect an existing database into a new model
 #Base = automap_base()
@@ -22,7 +23,7 @@ engine = create_engine("sqlite:///flight_cancellations.sqlite")
 
 # Create our session (link) from Python to the DB
 session = Session(engine)
-
+session_1 = Session(engine_1)
 #################################################
 # Flask Setup
 #################################################
@@ -36,54 +37,27 @@ CORS(app)
 @app.route("/")
 def index():
     return render_template(
-       "base.html", pages={
-        "airport": "",
-        "airline": "",
-        "compare": "active",
-        "app3": ""
+       "index.html", pages={
+        "airport": "active",
+        "airline": ""
     })
 
 @app.route("/airline")
 def airline():
     return render_template("airline.html", pages={
         "airport": "",
-        "airline": "active",
-        "compare": "",
-        "app3": ""
-    })
-
-@app.route("/airport")
-def airport():
-    return render_template("airport.html", pages={
-        "airport": "active",
-        "airline": "",
-        "compare": "",
-        "app3": ""
-    })
-
-@app.route("/compare")
-def compare():
-    return render_template(
-       "base.html", pages={
-        "airport": "",
-        "airline": "",
-        "compare": "active",
-        "app3": ""
-    })
-
-@app.route("/heatmap")
-def heatmap():
-    return render_template("indexsample.html", pages={
-        "airport": "",
-        "airline": "",
-        "compare": "",
-        "app3": "active"
+        "airline": "active"
     })
 
 @app.route("/api/airline_delay_cause.json")
 def airline_delay_cause():
     results = engine.execute("SELECT * FROM airline_delay_cause")
     return jsonify ([dict(_) for _ in results])
+
+@app.route("/api/airline_financial.json")
+def airline_financial():
+    results = engine_1.execute("SELECT * FROM airline_financial")
+    return jsonify([dict(_) for _ in results])
 
 
 if __name__ == '__main__':
