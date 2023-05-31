@@ -108,6 +108,6 @@ d3.json(url).then(function(data) {
 
   // Call the createHeatmap function initially
   createHeatmap();
-
+    
   
 });

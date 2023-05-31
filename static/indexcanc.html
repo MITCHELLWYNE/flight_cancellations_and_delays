@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancelled Risks</title>
+  <style>
+    .heatmap {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      padding: 10px;
+    }
+
+    .heatmap-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-basis: calc(100% / 6); 
+      margin-bottom: 4px;
+    }
+
+    .heatmap-cell {
+      flex-grow: 1;
+      height: 75px;
+      margin-right: 4px;
+    }
+
+    .y-label {
+      margin-bottom: 10px;
+    }
+
+
+  </style>
+  
+</head>
+
+<body>
+  <h1>Cancelled Risks</h1>
+
+  <div>
+    <label for="carrierDropdown">Select Carrier:</label>
+    <select id="carrierDropdown"></select>
+  </div> 
+
+  <div>
+    <label for="airportDropdown">Select Airport:</label>
+    <select id="airportDropdown"></select>
+  </div>
+
+  <div id="heatmap"></div>
+  <script>const url = "http://127.0.0.1:5000/api/airline_delay_cause.json";;</script>
+  <script src="https://d3js.org/d3-array.v2.min.js"></script>
+  <script src="https://d3js.org/d3-fetch.v2.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="appcanc.js"></script>
+
+</body>
+
+</html>
