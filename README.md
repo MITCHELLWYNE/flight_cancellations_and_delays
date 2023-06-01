@@ -29,3 +29,6 @@ These categories are defined as such by the Bureau of Transportation Statistics:
 
 ## Delays and Cencellations ##
 These two pages show the Carriers and Airports in a heatmap with a color scale from blue to red, for the delays page, and a color scale from purple to orange for the cancellations page how many delayed by 15 minutes, and cancelled flights there were by month.  In the delays page the brighter the red the more delays there were.  In the cancellations page the brighter the orange the more cancellations there were.  On both pages there is a hover over functioned used for easier reading.  After each hover over the grid line is greyed out to inform you that you have read that line.  In the drop down you are able to choose first from the carrier names.  In the second drop down you are able to choose from the Airport name.  Using this visualization lets you pick by your local airport and see how the carrier you chose is based on if it is late, or cancelled based on the previous years data.  
+
+### Note ###
+If the web app is used as a Github Page, the app.py file has to be downloaded and run in the terminal in order for the pages to work as intended.
